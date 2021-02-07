@@ -1,10 +1,21 @@
 from head import *
 
-def get_articles(soup):
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+}
+
+def get_articles(url):
     """
-    :type soup: BeautifulSoup object
+    :type url: String
     :rtype: List[String], article urls in the current page. None if this url is not available at ao3
     """
+    try:
+        req = requests.get(url, headers = headers)
+        html = req.text
+    except:
+        print("Connection failed, please check your VPN setting or simply restart it, url: " + url)
+        return
+    soup = BeautifulSoup(html, 'html.parser')
     
     if "No results found" in soup.text or 'something went wrong' in soup.text:
         return
