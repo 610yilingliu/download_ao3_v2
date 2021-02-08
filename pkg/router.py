@@ -1,4 +1,6 @@
-from head import *
+import requests
+import bs4
+from bs4 import BeautifulSoup
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -27,7 +29,7 @@ def get_articles(url):
             link_list = link.split('/')
             if len(link_list) != 3 or link_list[1] != 'works' or link_list[2].isdigit() == False:
                 continue
-            url = url_decorator("https://www.archiveofourown.org"  + link)
+            url = "https://www.archiveofourown.org"  + link
             urls.append(url)
     return urls
 

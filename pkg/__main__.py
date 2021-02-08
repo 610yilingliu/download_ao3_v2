@@ -2,7 +2,6 @@ import os
 import sys
 import time
 
-from head import *
 from router import *
 from fetcher import *
 
@@ -51,6 +50,7 @@ def dl_conbined(articles):
             if returned_item:
                 content, title = returned_item
                 write_file(title, content, folder_name)
+                time.sleep(2)
 
 class Logger(object):
     def __init__(self, filename, stream=sys.stdout):
@@ -76,9 +76,9 @@ def time_helper(seperator = '_', to_sec = True):
 
 if __name__ == '__main__':
     start_time = time_helper('-')
-    if not os.path.exists('./update_log'):
-        os.mkdir('./update_log')
-    sys.stdout = Logger('./update_log/' + start_time + '.log')
+    if not os.path.exists('./log'):
+        os.mkdir('./log')
+    sys.stdout = Logger('./log/' + start_time + '.log')
     print("Start time:" + start_time)
     print("Cannot be used in mainland China, please use a VPN with global mode or ask someone overseas to help you")
     print("All comments are written in English, some machines cannot print simplified Chinese on console")
@@ -135,6 +135,7 @@ if __name__ == '__main__':
                 for url in urls:
                     articles = get_articles(url)
                     dl_conbined(articles)
+                    time.sleep(60)
             elif argument == 's' or argument == 'S':
                 start = None
                 end = None
@@ -155,6 +156,7 @@ if __name__ == '__main__':
                     url = urls[i]
                     articles = get_articles(url)
                     dl_conbined(articles)
+                    time.sleep(60)
             else:
                 url = urls[int(curpage) - 1]
                 articles = get_articles(url)

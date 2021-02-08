@@ -6,6 +6,7 @@ __pycache__/
 # self defined
 *.html
 temp.py
+test/
 # C extensions
 *.so
 
