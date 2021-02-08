@@ -1,22 +1,30 @@
 import requests
 import bs4
+import time
 from bs4 import BeautifulSoup
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
 }
 
-def get_articles(url):
+def get_articles(url, retry_time = 0):
     """
     :type url: String
     :rtype: List[String], article urls in the current page. None if this url is not available at ao3
     """
+    succeed = True
     try:
         req = requests.get(url, headers = headers)
         html = req.text
     except:
-        print("Connection failed, please check your VPN setting or simply restart it, url: " + url)
-        return
+        succeed = False
+    if not succeed:
+        if retry_time < 3:
+            print(url + " retry in 20 seconds")
+            time.sleep(30)
+            get_articles(url, retry_time=retry_time + 1)
+        else:
+            return
     soup = BeautifulSoup(html, 'html.parser')
     
     if "No results found" in soup.text or 'something went wrong' in soup.text:
@@ -79,7 +87,7 @@ def get_pages(soup):
     
     if not standard_format:
         print("Cannot find standard link format, please email the link with error to yilingliu1994@gmail.com")
-        exit(2)
+        exit(0)
 
     mx_page = int(mx_page) + 1
     standard_format = "https://archiveofourown.org" + standard_format
