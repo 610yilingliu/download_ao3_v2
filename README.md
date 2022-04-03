@@ -6,7 +6,8 @@ ao3下载器第二版.几乎是重构了所有代码.原项目是自己一年前
 
 已废弃老项目: https://github.com/610yilingliu/Get-Ao3-Article
 
-目前使用工作邮箱：liuyiling.windy610@bytedance.com.github绑的这个很少看了
+目前使用工作邮箱：liuyiling.windy610@bytedance.com
+github绑的这个很少看了
 
 ## 运行环境
 
