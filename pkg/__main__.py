@@ -40,7 +40,7 @@ def write_file(title, content, folder_name):
             name += char
     fname = './' + folder_name + '/' + name + '.txt'
     if os.path.isfile(fname):
-        print(fname + ' already exists')
+        print('------------------------' + fname + ' already exists -------------------------')
         return
     with open(fname, 'w', encoding= 'utf-8') as f:
         f.write(content)
@@ -66,8 +66,8 @@ class Logger(object):
     Logging module
     """
     def __init__(self, filename, stream=sys.stdout):
-	    self.terminal = stream
-	    self.log = open(filename, "wb", buffering=0)
+        self.terminal = stream
+        self.log = open(filename, "wb", buffering=0)
 
     def write(self, *message):
         message = ",".join([str(it) for it in message])
@@ -205,5 +205,4 @@ if __name__ == '__main__':
     print("Download Finished, if you cannot find the text file in that folder, please close simplified Chinese only option")
     print("Press any key to close the program")
     input()
-    
     

@@ -25,6 +25,10 @@ def proceed(url, retry_time = 0):
             return
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
+
+
+
+
     proceed_bar = soup.find_all('ul', attrs = {"class": "actions", "role":"navigation"})
     proceed_item = None
     for item in proceed_bar:
@@ -106,6 +110,9 @@ def get_content(url, zh_cn_only = False, retry_time = 0):
     # if it is a single chapter,we should use link contains whole chapter
     if not soup:
         return
+    
+
+
     entire_obj = soup.find('li', attrs = {"class": "chapter entire"})
     if entire_obj:
         link_obj = entire_obj.find('a')
@@ -144,6 +151,14 @@ def get_content(url, zh_cn_only = False, retry_time = 0):
         else:
             print(url + " rejected by ao3")
             return
+        
+    for br in soup.find_all('br'):
+        br.insert_before('\n')
+        # 处理类似https://www.archiveofourown.org/works/28742886 不显示换行的情况
+
+    for p in soup.find_all('p'):
+        p.insert_before('\n')
+        # 处理https://archiveofourown.org/works/26447329 不显示换行的情况
     title_obj = soup.find('title')
     # if access denied by ao3(if you download lots of articles, like 50+ articles, ao3 will reject your request and ask you to retry later)
     if not title_obj:

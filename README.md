@@ -6,8 +6,10 @@ ao3下载器第二版.几乎是重构了所有代码.原项目是自己一年前
 
 已废弃老项目: https://github.com/610yilingliu/Get-Ao3-Article
 
-目前使用工作邮箱：liuyiling.windy610@bytedance.com
-github绑的这个很少看了
+已从字节离职，人在澳洲，有事联系 yilingliu1994@gmail.com
+
+## 更新日志
+2024-07-28：使用回车（\n）替代<p>与<br>，解决网页显示空格而txt无法显示的问题； 优化文件名已经存在时的提示内容
 
 ## 运行环境
 
@@ -95,3 +97,5 @@ https://archiveofourown.org/works?utf8=%E2%9C%93&work_search%5Bsort_column%5D=re
 https://archiveofourown.org/users/HelloHappy/pseuds/HelloHappy
 
 https://archiveofourown.org/users/huaishang233/pseuds/huaishang233/works
+
+https://www.archiveofourown.org/works/28742886
