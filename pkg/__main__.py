@@ -4,7 +4,7 @@ import time
 
 from pkg.router import *
 from pkg.fetcher import *
-
+from pkg.gpt_helper import GPTHelper
 
 
 headers = {
@@ -45,7 +45,7 @@ def write_file(title, content, folder_name):
     with open(fname, 'w', encoding= 'utf-8') as f:
         f.write(content)
 
-def dl_conbined(articles):
+def dl_conbined(articles, gpt = None, cp = None):
     """
     type articles: List[String] or None
     rtype: int, number of articles downloaded
@@ -56,9 +56,19 @@ def dl_conbined(articles):
             returned_item = get_content(article, zh_cn_only= zhcn_only)
             if returned_item:
                 content, title = returned_item
-                write_file(title, content, folder_name)
+                if gpt is not None:
+                    gpt.import_text(content)
+                    score = gpt.judgement(cp)
+                    if float(score) < 0.2:
+                        print("文章与CP关联度不高或有拆逆，跳过")
+                        continue
+                    else:
+                        write_file(title, content, folder_name)
+                        cnt += 1
                 # success count + 1
-                cnt += 1
+                else:
+                    write_file(title, content, folder_name)
+                    cnt += 1
     return cnt     
 
 class Logger(object):
@@ -88,6 +98,12 @@ def time_helper(seperator = '_', to_sec = True):
 
 if __name__ == '__main__':
     # how many articles downloaded
+    gpt_on = False
+    if gpt_on == True:
+        print("测试功能，使用GPT检查文章是否有它人乱入CP/逆CP行为.请新建.env文件，内容为OPENAI_API_KEY = 你的api key，非程序员请无视，本功能默认关闭（前一行gpt_on = False）")
+        cp = input("输入目标CP（两个字，如旬宴）: ")
+        gpt = GPTHelper(api_key = os.getenv("OPENAI_API_KEY"))
+
     article_cnt = 0
     # logging
     if not os.path.exists('./log'):
@@ -167,7 +183,10 @@ if __name__ == '__main__':
             if argument == 'a' or argument == 'A':
                 for url in urls:
                     articles = get_articles(url)
-                    article_cnt += dl_conbined(articles)
+                    if gpt_on == False:
+                        article_cnt += dl_conbined(articles, gpt = None)
+                    else:
+                        article_cnt += dl_conbined(articles, gpt = gpt, cp = cp)
             # download page from a range
             elif argument == 's' or argument == 'S':
                 start = None
@@ -197,10 +216,16 @@ if __name__ == '__main__':
             else:
                 url = urls[int(curpage) - 1]
                 articles = get_articles(url)
-                article_cnt += dl_conbined(articles)
+                if gpt_on == False:
+                    article_cnt += dl_conbined(articles, gpt = None)
+                else:
+                    article_cnt += dl_conbined(articles, gpt = gpt, cp = cp)
         else:
             articles = get_articles(url)
-            article_cnt += dl_conbined(articles)
+            if gpt_on == False:
+                article_cnt += dl_conbined(articles, gpt = None)
+            else:
+                article_cnt += dl_conbined(articles, gpt = gpt, cp = cp)
     print(str(article_cnt) + ' articles downloaded')
     print("Download Finished, if you cannot find the text file in that folder, please close simplified Chinese only option")
     print("Press any key to close the program")
